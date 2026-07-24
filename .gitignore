@@ -34,3 +34,5 @@ coverage/
 Thumbs.db
 *.log
 server/.env
+server/.env
+.env
