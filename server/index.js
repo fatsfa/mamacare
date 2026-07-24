@@ -50,6 +50,19 @@ app.get('/', (req, res) => {
   });
 });
 
+// Mount test routes (for quick model testing)
+const testRoutes = require('./routes/test');
+app.use('/api/test', testRoutes);
+const logRoutes = require('./routes/logs');
+const vaccineRoutes = require('./routes/vaccines');
+const articleRoutes = require('./routes/articles');
+const babyRoutes = require('./routes/babies');
+
+app.use('/api/logs', logRoutes);
+app.use('/api/vaccines', vaccineRoutes);
+app.use('/api/articles', articleRoutes);
+app.use('/api/babies', babyRoutes);
+
 // 404 route (catch all unknown routes)
 app.use((req, res) => {
   res.status(404).json({
@@ -58,6 +71,7 @@ app.use((req, res) => {
     method: req.method,
   });
 });
+
 
 // ===== ERROR HANDLING =====
 app.use((err, req, res, next) => {

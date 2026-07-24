@@ -1,0 +1,8 @@
+[
+  { "age": "At birth", "name": "BCG" },
+  { "age": "2 months", "name": "Pentavalent 1" },
+  { "age": "4 months", "name": "Pentavalent 2" },
+  { "age": "6 months", "name": "Pentavalent 3" },
+  { "age": "12 months", "name": "MMR" },
+  { "age": "18 months", "name": "Measles 2" }
+]
