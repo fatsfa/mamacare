@@ -13,13 +13,14 @@ const verifyBabyOwnership = async (babyId, userId) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { babyId } = req.body;
+    const body = req.body || {};
+    const { babyId } = body;
     if (!babyId) return res.status(400).json({ ok: false, error: 'babyId is required' });
 
     const isOwner = await verifyBabyOwnership(babyId, req.user.id);
     if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
 
-    const log = await Log.create(req.body);
+    const log = await Log.create(body);
     res.json({ ok: true, log });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });

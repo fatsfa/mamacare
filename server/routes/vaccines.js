@@ -29,13 +29,14 @@ router.get('/', async (req, res) => {
 
 router.post('/mark-done', async (req, res) => {
   try {
-    const { babyId } = req.body;
+    const body = req.body || {};
+    const { babyId } = body;
     if (!babyId) return res.status(400).json({ ok: false, error: 'babyId is required' });
 
     const isOwner = await verifyBabyOwnership(babyId, req.user.id);
     if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
 
-    const done = await VaccineDone.create(req.body);
+    const done = await VaccineDone.create(body);
     res.json({ ok: true, done });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });
