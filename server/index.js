@@ -52,12 +52,14 @@ app.get('/', (req, res) => {
 
 // Mount test routes (for quick model testing)
 const testRoutes = require('./routes/test');
-app.use('/api/test', testRoutes);
+const authRoutes = require('./routes/auth');
 const logRoutes = require('./routes/logs');
 const vaccineRoutes = require('./routes/vaccines');
 const articleRoutes = require('./routes/articles');
 const babyRoutes = require('./routes/babies');
 
+app.use('/api/test', testRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/vaccines', vaccineRoutes);
 app.use('/api/articles', articleRoutes);
