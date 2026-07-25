@@ -7,7 +7,8 @@ const BabySchema = new mongoose.Schema({
   gender: { type: String, enum: ['male', 'female', 'other'], default: 'other' },
   photoUrl: { type: String },
   bloodType: { type: String },
-  birthWeight: { type: Number }, // grams or kg as documented
+  birthWeightKg: { type: Number, min: 0 },
+  heightCm: { type: Number, min: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 
