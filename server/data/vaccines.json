@@ -1,8 +1,140 @@
 [
-  { "age": "At birth", "name": "BCG" },
-  { "age": "2 months", "name": "Pentavalent 1" },
-  { "age": "4 months", "name": "Pentavalent 2" },
-  { "age": "6 months", "name": "Pentavalent 3" },
-  { "age": "12 months", "name": "MMR" },
-  { "age": "18 months", "name": "Measles 2" }
+  {
+    "name": "BCG",
+    "description": "Bacille Calmette-Guérin (Tuberculosis)",
+    "ageMonths": 0,
+    "ageLabel": "At birth"
+  },
+  {
+    "name": "Hepatitis B (Dose 1)",
+    "description": "Hepatitis B vaccine, 1st dose",
+    "ageMonths": 0,
+    "ageLabel": "At birth"
+  },
+  {
+    "name": "Polio (IPV Dose 1)",
+    "description": "Inactivated Polio Vaccine, 1st dose",
+    "ageMonths": 2,
+    "ageLabel": "2 months"
+  },
+  {
+    "name": "Pentavalent (Dose 1)",
+    "description": "DPT + Hepatitis B + Hib, 1st dose",
+    "ageMonths": 2,
+    "ageLabel": "2 months"
+  },
+  {
+    "name": "PCV (Dose 1)",
+    "description": "Pneumococcal Conjugate Vaccine, 1st dose",
+    "ageMonths": 2,
+    "ageLabel": "2 months"
+  },
+  {
+    "name": "Rotavirus (Dose 1)",
+    "description": "Rotavirus vaccine, 1st dose",
+    "ageMonths": 2,
+    "ageLabel": "2 months"
+  },
+  {
+    "name": "Pentavalent (Dose 2)",
+    "description": "DPT + Hepatitis B + Hib, 2nd dose",
+    "ageMonths": 4,
+    "ageLabel": "4 months"
+  },
+  {
+    "name": "Polio (IPV Dose 2)",
+    "description": "Inactivated Polio Vaccine, 2nd dose",
+    "ageMonths": 4,
+    "ageLabel": "4 months"
+  },
+  {
+    "name": "PCV (Dose 2)",
+    "description": "Pneumococcal Conjugate Vaccine, 2nd dose",
+    "ageMonths": 4,
+    "ageLabel": "4 months"
+  },
+  {
+    "name": "Rotavirus (Dose 2)",
+    "description": "Rotavirus vaccine, 2nd dose",
+    "ageMonths": 4,
+    "ageLabel": "4 months"
+  },
+  {
+    "name": "Pentavalent (Dose 3)",
+    "description": "DPT + Hepatitis B + Hib, 3rd dose",
+    "ageMonths": 6,
+    "ageLabel": "6 months"
+  },
+  {
+    "name": "Polio (IPV Dose 3)",
+    "description": "Inactivated Polio Vaccine, 3rd dose",
+    "ageMonths": 6,
+    "ageLabel": "6 months"
+  },
+  {
+    "name": "PCV (Dose 3)",
+    "description": "Pneumococcal Conjugate Vaccine, 3rd dose",
+    "ageMonths": 6,
+    "ageLabel": "6 months"
+  },
+  {
+    "name": "Hepatitis B (Dose 2)",
+    "description": "Hepatitis B vaccine, 2nd dose",
+    "ageMonths": 6,
+    "ageLabel": "6 months"
+  },
+  {
+    "name": "Yellow Fever",
+    "description": "Yellow Fever vaccine",
+    "ageMonths": 9,
+    "ageLabel": "9 months"
+  },
+  {
+    "name": "Measles, Mumps, Rubella (MMR)",
+    "description": "MMR vaccine, 1st dose",
+    "ageMonths": 12,
+    "ageLabel": "12 months (1 year)"
+  },
+  {
+    "name": "Varicella",
+    "description": "Chickenpox vaccine",
+    "ageMonths": 12,
+    "ageLabel": "12 months (1 year)"
+  },
+  {
+    "name": "PCV Booster",
+    "description": "Pneumococcal Conjugate Vaccine booster",
+    "ageMonths": 12,
+    "ageLabel": "12 months (1 year)"
+  },
+  {
+    "name": "Hepatitis A (Dose 1)",
+    "description": "Hepatitis A vaccine, 1st dose",
+    "ageMonths": 12,
+    "ageLabel": "12 months (1 year)"
+  },
+  {
+    "name": "DPT Booster (Dose 1)",
+    "description": "DPT booster, 1st dose",
+    "ageMonths": 18,
+    "ageLabel": "18 months"
+  },
+  {
+    "name": "Polio Booster",
+    "description": "Inactivated Polio Vaccine booster",
+    "ageMonths": 18,
+    "ageLabel": "18 months"
+  },
+  {
+    "name": "Hepatitis A (Dose 2)",
+    "description": "Hepatitis A vaccine, 2nd dose",
+    "ageMonths": 18,
+    "ageLabel": "18 months"
+  },
+  {
+    "name": "MMR (Dose 2)",
+    "description": "MMR vaccine, 2nd dose",
+    "ageMonths": 24,
+    "ageLabel": "24 months (2 years)"
+  }
 ]

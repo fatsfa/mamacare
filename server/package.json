@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "seed": "node scripts/seed.js",
     "seed:articles": "node scripts/seedArticles.js",
     "test": "jest --detectOpenHandles"
   },
