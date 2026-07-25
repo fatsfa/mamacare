@@ -57,6 +57,7 @@ const logRoutes = require('./routes/logs');
 const vaccineRoutes = require('./routes/vaccines');
 const articleRoutes = require('./routes/articles');
 const babyRoutes = require('./routes/babies');
+const aiRoutes = require('./routes/ai');
 
 app.use('/api/test', testRoutes);
 app.use('/api/auth', authRoutes);
@@ -64,6 +65,7 @@ app.use('/api/logs', logRoutes);
 app.use('/api/vaccines', vaccineRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/babies', babyRoutes);
+app.use('/api/ai', aiRoutes);
 
 // 404 route (catch all unknown routes)
 app.use((req, res) => {
