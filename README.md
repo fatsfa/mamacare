@@ -163,7 +163,498 @@ A mom can complete this flow in < 5 minutes:
 - Multi-language support
 - Wearable device integration
 
+## 🔌 API Endpoints Reference
+
+### **Base URL**
+- **Local:** `http://localhost:5000`
+- **Production:** `https://mamacare-api.render.com` (after deployment)
+
+All authenticated endpoints require header:
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
+### **1️⃣ AUTHENTICATION**
+
+#### Register
+```
+POST /api/auth/register
+Content-Type: application/json
+
+Request Body:
+{
+  "name": "Fatima",
+  "email": "fatima@example.com",
+  "password": "SecurePass123"
+}
+
+Response (201):
+{
+  "ok": true,
+  "user": {
+    "id": "64e8f6b2c2a7f3d1e5b4a9c8",
+    "name": "Fatima",
+    "email": "fatima@example.com"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+#### Login
+```
+POST /api/auth/login
+Content-Type: application/json
+
+Request Body:
+{
+  "email": "fatima@example.com",
+  "password": "SecurePass123"
+}
+
+Response (200):
+{
+  "ok": true,
+  "user": {
+    "id": "64e8f6b2c2a7f3d1e5b4a9c8",
+    "name": "Fatima",
+    "email": "fatima@example.com"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+#### Get Current User
+```
+GET /api/auth/me
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "user": {
+    "_id": "64e8f6b2c2a7f3d1e5b4a9c8",
+    "name": "Fatima",
+    "email": "fatima@example.com",
+    "createdAt": "2026-07-24T12:41:21.694Z"
+  }
+}
+```
+
+---
+
+### **2️⃣ BABIES (CRUD)**
+
+#### Create Baby
+```
+POST /api/babies
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "name": "Layla",
+  "dob": "2026-03-15",
+  "gender": "female",
+  "bloodType": "B+",
+  "birthWeightKg": 3.5,
+  "heightCm": 50
+}
+
+Response (200):
+{
+  "ok": true,
+  "baby": {
+    "_id": "64e8f6b2c2a7f3d1e5b4a9d9",
+    "userId": "64e8f6b2c2a7f3d1e5b4a9c8",
+    "name": "Layla",
+    "dob": "2026-03-15T00:00:00.000Z",
+    "gender": "female",
+    "bloodType": "B+",
+    "birthWeightKg": 3.5,
+    "heightCm": 50,
+    "ageReadable": "4 months 1 week",
+    "createdAt": "2026-07-24T12:41:21.694Z"
+  }
+}
+```
+
+#### List User's Babies
+```
+GET /api/babies
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "babies": [
+    {
+      "_id": "64e8f6b2c2a7f3d1e5b4a9d9",
+      "name": "Layla",
+      "dob": "2026-03-15T00:00:00.000Z",
+      "ageReadable": "4 months 1 week",
+      "gender": "female"
+    }
+  ]
+}
+```
+
+#### Get Baby by ID
+```
+GET /api/babies/:babyId
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "baby": { /* baby object */ }
+}
+```
+
+#### Update Baby
+```
+PUT /api/babies/:babyId
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "name": "Layla Rose",
+  "heightCm": 52
+}
+
+Response (200):
+{
+  "ok": true,
+  "baby": { /* updated baby object */ }
+}
+```
+
+#### Delete Baby
+```
+DELETE /api/babies/:babyId
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true
+}
+```
+
+---
+
+### **3️⃣ LOGS (Feeding, Diaper, Sleep)**
+
+#### Create Log
+```
+POST /api/logs
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body (Feeding):
+{
+  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+  "type": "feeding",
+  "startTime": "2026-07-24T09:00:00Z",
+  "endTime": "2026-07-24T09:15:00Z",
+  "amount": 120,
+  "notes": "Left breast only"
+}
+
+Request Body (Sleep):
+{
+  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+  "type": "sleep",
+  "startTime": "2026-07-24T13:00:00Z",
+  "endTime": "2026-07-24T14:30:00Z",
+  "notes": "Afternoon nap"
+}
+
+Request Body (Diaper):
+{
+  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+  "type": "diaper",
+  "startTime": "2026-07-24T10:00:00Z",
+  "notes": "Poo, yellow color"
+}
+
+Response (200):
+{
+  "ok": true,
+  "log": {
+    "_id": "64e8f6b2c2a7f3d1e5b4a9ea",
+    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+    "type": "feeding",
+    "startTime": "2026-07-24T09:00:00.000Z",
+    "endTime": "2026-07-24T09:15:00.000Z",
+    "amount": 120,
+    "notes": "Left breast only",
+    "createdAt": "2026-07-24T12:41:21.694Z"
+  }
+}
+```
+
+#### List Logs for Baby by Date
+```
+GET /api/logs?babyId=64e8f6b2c2a7f3d1e5b4a9d9&date=2026-07-24
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "logs": [
+    { /* log object 1 */ },
+    { /* log object 2 */ }
+  ]
+}
+```
+
+#### Update Log (Stop Timer)
+```
+PUT /api/logs/:logId
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "endTime": "2026-07-24T14:30:00Z"
+}
+
+Response (200):
+{
+  "ok": true,
+  "log": { /* updated log */ }
+}
+```
+
+#### Delete Log
+```
+DELETE /api/logs/:logId
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true
+}
+```
+
+#### Get Daily Stats
+```
+GET /api/logs/stats?babyId=64e8f6b2c2a7f3d1e5b4a9d9&date=2026-07-24
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "stats": {
+    "feedingCount": 8,
+    "feedingTotalMl": 960,
+    "diaperCount": 6,
+    "sleepCount": 3,
+    "sleepTotalMinutes": 720
+  }
+}
+```
+
+---
+
+### **4️⃣ VACCINES**
+
+#### Get Vaccine Schedule for Baby
+```
+GET /api/vaccines?babyId=64e8f6b2c2a7f3d1e5b4a9d9
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "vaccines": {
+    "upcoming": [
+      {
+        "name": "MMR",
+        "ageMonths": 12,
+        "daysUntilDue": 45
+      }
+    ],
+    "due": [
+      {
+        "name": "Pentavalent (1st dose)",
+        "ageMonths": 2,
+        "daysSinceDue": 5
+      }
+    ],
+    "completed": [
+      {
+        "name": "BCG",
+        "dateDone": "2026-03-15T00:00:00.000Z",
+        "photoUrl": "https://example.com/vaccine-card.jpg"
+      }
+    ]
+  }
+}
+```
+
+#### Mark Vaccine as Done
+```
+POST /api/vaccines/mark-done
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+  "vaccineName": "Pentavalent (1st dose)",
+  "dateDone": "2026-07-24T10:00:00Z",
+  "photoUrl": "https://example.com/vaccine-photo.jpg"
+}
+
+Response (200):
+{
+  "ok": true,
+  "done": {
+    "_id": "64e8f6b2c2a7f3d1e5b4a9eb",
+    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+    "vaccineName": "Pentavalent (1st dose)",
+    "dateDone": "2026-07-24T10:00:00.000Z",
+    "photoUrl": "https://example.com/vaccine-photo.jpg",
+    "createdAt": "2026-07-24T12:41:21.694Z"
+  }
+}
+```
+
+---
+
+### **5️⃣ ARTICLES**
+
+#### List All Articles
+```
+GET /api/articles
+Auth: Not required
+
+Response (200):
+{
+  "ok": true,
+  "articles": [
+    {
+      "_id": "64e8f6b2c2a7f3d1e5b4a9ec",
+      "title": "How to Burp Your Baby",
+      "category": "feeding",
+      "content": "Burping helps prevent gas. Hold baby upright..."
+    }
+  ]
+}
+```
+
+#### Filter by Category
+```
+GET /api/articles?category=feeding
+Auth: Not required
+
+Response (200):
+{
+  "ok": true,
+  "articles": [ /* articles in feeding category */ ]
+}
+```
+
+#### Search Articles
+```
+GET /api/articles?search=sleep
+Auth: Not required
+
+Response (200):
+{
+  "ok": true,
+  "articles": [ /* articles matching "sleep" */ ]
+}
+```
+
+#### Bookmark Article
+```
+POST /api/articles/bookmark
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "articleId": "64e8f6b2c2a7f3d1e5b4a9ec"
+}
+
+Response (200):
+{
+  "ok": true,
+  "bookmarked": true
+}
+```
+
+---
+
+### **6️⃣ AI ASSISTANT**
+
+#### Ask AI Question
+```
+POST /api/ai/ask
+Auth: Required ✅
+Content-Type: application/json
+
+Request Body:
+{
+  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+  "question": "My baby has 38°C fever, what should I do?"
+}
+
+Response (200):
+{
+  "ok": true,
+  "answer": {
+    "_id": "64e8f6b2c2a7f3d1e5b4a9ed",
+    "userId": "64e8f6b2c2a7f3d1e5b4a9c8",
+    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
+    "question": "My baby has 38°C fever, what should I do?",
+    "response": "Fever in babies can be normal. Monitor for other symptoms. Give infant paracetamol if needed. IMPORTANT: Always consult your pediatrician.",
+    "createdAt": "2026-07-24T12:41:21.694Z"
+  }
+}
+```
+
+#### Get AI Chat History
+```
+GET /api/ai/history?babyId=64e8f6b2c2a7f3d1e5b4a9d9
+Auth: Required ✅
+
+Response (200):
+{
+  "ok": true,
+  "history": [
+    { /* question/answer 1 */ },
+    { /* question/answer 2 */ }
+  ]
+}
+```
+
+---
+
+### **Error Response Format**
+
+All errors follow this format:
+```
+{
+  "ok": false,
+  "error": "Description of the error"
+}
+```
+
+Common errors:
+- `400` - Bad request (invalid data)
+- `401` - Unauthorized (missing/invalid JWT)
+- `404` - Not found
+- `500` - Server error
+
+---
+
 ## 📄 License
+
 
 MIT License - see LICENSE file
 
