@@ -653,8 +653,94 @@ Common errors:
 
 ---
 
-## 📄 License
+## 🚀 How to Run Locally
 
+### Prerequisites
+- **Node.js** v16+ and npm
+- **MongoDB Atlas** account with connection string (or local MongoDB)
+- **Git** for cloning the repository
+
+### Setup Backend (Server)
+
+1. **Navigate to server folder**
+   ```bash
+   cd server
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Create `.env` file** in `server/` folder
+   ```
+   PORT=5000
+   MONGO_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster.mongodb.net/mamacare?retryWrites=true&w=majority
+   JWT_SECRET=your_super_secret_key_here_change_in_production
+   ```
+   Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with your MongoDB Atlas credentials.
+
+4. **Seed the database** (articles)
+   ```bash
+   npm run seed
+   ```
+
+5. **Start the server**
+   ```bash
+   npm run dev
+   ```
+   Server runs on `http://localhost:5000`
+
+### Setup Frontend (Client)
+
+1. **Navigate to client folder** (in a new terminal)
+   ```bash
+   cd client
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   Frontend runs on `http://localhost:5173`
+
+### Test End-to-End Flow
+
+1. Open `http://localhost:5173` in your browser
+2. Click **Register** → create account with email + password
+3. Click **Add Baby** → fill in baby details (name, DOB, gender, blood type, weight, height)
+4. See baby appear on **Dashboard**
+5. Try **View Vaccines** → see UAE MOH schedule by age
+6. (Coming soon) Try **Add Log**, **Ask AI**, **Read Articles**
+
+### Verify Backend is Running
+
+Test with curl:
+```bash
+# Get all articles (no auth needed)
+curl http://localhost:5000/api/articles
+
+# Should return: { "ok": true, "articles": [...] }
+```
+
+### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `MONGO_URI not set` | Check `.env` file exists with correct MongoDB connection string |
+| `Connection refused on localhost:5000` | Ensure `npm run dev` is running in server folder |
+| `CORS error in browser console` | Backend may not be running; start with `npm run dev` |
+| `Token expired` | Delete token from localStorage or re-register: `localStorage.clear()` |
+| `Cannot read property 'babyId'` | Ensure request body includes all required fields |
+
+---
+
+## 📄 License
 
 MIT License - see LICENSE file
 
@@ -664,4 +750,4 @@ Built as a portfolio project to demonstrate full-stack development with React, N
 
 ---
 
-**Last Updated:** 2026-07-23
+**Last Updated:** 2026-07-24
