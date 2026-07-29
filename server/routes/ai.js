@@ -35,19 +35,12 @@ const mockAIResponse = (question) => {
 
 router.post('/ask', async (req, res) => {
   try {
-    const { babyId, question } = req.body;
-    if (!babyId || !question) {
-      return res.status(400).json({ ok: false, error: 'babyId and question are required' });
-    }
-
-    const isOwner = await verifyBabyOwnership(babyId, req.user.id);
-    if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
+    const { question } = req.body;
+    if (!question) return res.status(400).json({ ok: false, error: 'question is required' });
 
     const response = mockAIResponse(question);
-
     const chat = await AIChat.create({
       userId: req.user.id,
-      babyId,
       question,
       response,
     });
@@ -60,13 +53,7 @@ router.post('/ask', async (req, res) => {
 
 router.get('/history', async (req, res) => {
   try {
-    const { babyId } = req.query;
-    if (!babyId) return res.status(400).json({ ok: false, error: 'babyId is required' });
-
-    const isOwner = await verifyBabyOwnership(babyId, req.user.id);
-    if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
-
-    const history = await AIChat.find({ userId: req.user.id, babyId }).sort({ createdAt: -1 });
+    const history = await AIChat.find({ userId: req.user.id }).sort({ createdAt: -1 }).limit(30);
     res.json({ ok: true, history });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });

@@ -23,6 +23,7 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   if (!token) return null;
+  if (location.pathname === '/dashboard') return null;
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
