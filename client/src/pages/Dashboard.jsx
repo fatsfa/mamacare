@@ -42,10 +42,11 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Navigation */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
           <Link to="/logs" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center">📝 Logs</Link>
           <Link to="/vaccines" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center">💉 Vaccines</Link>
           <Link to="/articles" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center">📚 Articles</Link>
+          <Link to="/stats" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg text-center">📊 Stats</Link>
           <Link to="/ai-assistant" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center">🤖 AI Help</Link>
         </div>
 

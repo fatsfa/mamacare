@@ -9,6 +9,7 @@ import Logs from './pages/Logs';
 import Vaccines from './pages/Vaccines';
 import Articles from './pages/Articles';
 import AIAssistant from './pages/AIAssistant';
+import Stats from './pages/Stats';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -31,6 +32,7 @@ function App() {
         <Route path="/vaccines" element={token ? <Vaccines /> : <Navigate to="/login" />} />
         <Route path="/articles" element={<Articles />} />
         <Route path="/ai-assistant" element={token ? <AIAssistant /> : <Navigate to="/login" />} />
+        <Route path="/stats" element={token ? <Stats /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );
