@@ -41,28 +41,32 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Navigation */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-          <Link to="/logs" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center">📝 Logs</Link>
-          <Link to="/vaccines" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center">💉 Vaccines</Link>
-          <Link to="/articles" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center">📚 Articles</Link>
-          <Link to="/stats" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg text-center">📊 Stats</Link>
-          <Link to="/ai-assistant" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center">🤖 AI Help</Link>
-        </div>
-
         {error && <div className="mb-4 rounded-xl bg-red-100 text-red-700 p-4">{error}</div>}
 
         {loading ? (
           <div className="rounded-3xl bg-white p-6 shadow-sm">Loading babies...</div>
+        ) : babies.length === 0 ? (
+          <div className="rounded-3xl bg-white p-6 shadow-sm text-center">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">👶 Welcome to MamaCare!</h2>
+            <p className="text-gray-600 mb-6">Add your first baby to get started.</p>
+            <Link to="/babies/add" className="inline-flex rounded-2xl bg-pink-500 text-white px-6 py-3 font-semibold hover:bg-pink-600 transition">
+              ➕ Add Baby
+            </Link>
+          </div>
         ) : (
-          <div className="space-y-4">
-            {babies.length === 0 ? (
-              <div className="rounded-3xl bg-white p-6 shadow-sm">
-                <p className="text-gray-700">No babies added yet.</p>
-                <Link to="/babies/add" className="mt-4 inline-flex rounded-2xl bg-pink-500 text-white px-4 py-3 font-semibold hover:bg-pink-600">Add your first baby</Link>
-              </div>
-            ) : (
-              babies.map((baby) => (
+          <div>
+            {/* Quick Navigation - Only show when babies exist */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+              <Link to="/logs" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center">📝 Logs</Link>
+              <Link to="/vaccines" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center">💉 Vaccines</Link>
+              <Link to="/articles" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center">📚 Articles</Link>
+              <Link to="/stats" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg text-center">📊 Stats</Link>
+              <Link to="/ai-assistant" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center">🤖 AI Help</Link>
+            </div>
+
+            {/* Baby Cards */}
+            <div className="space-y-4">
+              {babies.map((baby) => (
                 <div key={baby._id} className="rounded-3xl bg-white p-6 shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
@@ -79,8 +83,8 @@ export default function Dashboard() {
                   </p>
                   <p className="mt-2 text-gray-600">Height: {baby.heightCm ? `${baby.heightCm} cm` : 'Not set'}</p>
                 </div>
-              ))
-            )}
+              ))}
+            </div>
           </div>
         )}
       </div>

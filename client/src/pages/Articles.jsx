@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { fetchBabies } from '../api';
 
 export default function Articles() {
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [babies, setBabies] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
   const [bookmarks, setBookmarks] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   useEffect(() => {
-    fetchArticles();
-    fetchBookmarks();
-  }, [category, search]);
+    checkBabies();
+  }, []);
+
+  const checkBabies = async () => {
+    try {
+      const data = await fetchBabies();
+      setBabies(data.babies || []);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (babies.length > 0) {
+      fetchArticles();
+      fetchBookmarks();
+    }
+  }, [category, search, babies]);
 
   const fetchArticles = async () => {
     setLoading(true);
@@ -80,6 +99,19 @@ export default function Articles() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-4">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">📚 Articles & Tips</h1>
+
+        {loading ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : babies.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">👶 No Baby Added Yet</h2>
+            <p className="text-gray-600 mb-6">Add a baby first to read articles.</p>
+            <Link to="/babies/add" className="inline-flex rounded-2xl bg-pink-500 text-white px-6 py-3 font-semibold hover:bg-pink-600 transition">
+              ➕ Add Baby
+            </Link>
+          </div>
+        ) : (
+        <>
 
         {/* Search & Filter */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6 space-y-4">
@@ -173,6 +205,8 @@ export default function Articles() {
             ))
           )}
         </div>
+        </>
+        )}
       </div>
     </div>
   );
