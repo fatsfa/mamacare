@@ -41,6 +41,14 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Quick Navigation */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <Link to="/logs" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center">📝 Logs</Link>
+          <Link to="/vaccines" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center">💉 Vaccines</Link>
+          <Link to="/articles" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center">📚 Articles</Link>
+          <Link to="/ai-assistant" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center">🤖 AI Help</Link>
+        </div>
+
         {error && <div className="mb-4 rounded-xl bg-red-100 text-red-700 p-4">{error}</div>}
 
         {loading ? (
@@ -59,6 +67,7 @@ export default function Dashboard() {
                     <div>
                       <h2 className="text-2xl font-semibold text-pink-700">{baby.name}</h2>
                       <p className="text-gray-500">DOB: {new Date(baby.dob).toLocaleDateString()}</p>
+                      <p className="text-xs text-gray-500 mt-1">ID: {baby._id}</p>
                     </div>
                     <div className="rounded-full bg-pink-100 px-4 py-2 text-pink-700 font-semibold">Age: {baby.ageReadable || 'N/A'}</div>
                   </div>
@@ -68,7 +77,6 @@ export default function Dashboard() {
                     Birth Weight: {baby.birthWeightKg != null ? `${baby.birthWeightKg.toFixed(1).replace(/\.0$/, '')} kg` : baby.birthWeight ? `${(baby.birthWeight / 1000).toFixed(1).replace(/\.0$/, '')} kg` : 'Not set'}
                   </p>
                   <p className="mt-2 text-gray-600">Height: {baby.heightCm ? `${baby.heightCm} cm` : 'Not set'}</p>
-                  <p className="mt-2 text-gray-600">Head circumference: {baby.headCircumferenceCm ? `${baby.headCircumferenceCm} cm` : 'Not set'}</p>
                 </div>
               ))
             )}
