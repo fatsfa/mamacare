@@ -10,20 +10,27 @@ export default function Stats() {
   });
   const [babyId, setBabyId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const fetchStats = async () => {
-    if (!babyId) return;
+    const cleanId = babyId.trim();
+    if (!cleanId) {
+      setError('Please enter baby ID');
+      return;
+    }
+
     setLoading(true);
+    setError('');
     const token = localStorage.getItem('token');
 
     try {
       const today = new Date().toISOString().split('T')[0];
-      const res = await fetch(`http://localhost:5000/api/logs?babyId=${babyId}&date=${today}`, {
+      const res = await fetch(`http://localhost:5000/api/logs?babyId=${cleanId}&date=${today}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const logData = await res.json();
 
-      const res2 = await fetch(`http://localhost:5000/api/vaccines?babyId=${babyId}`, {
+      const res2 = await fetch(`http://localhost:5000/api/vaccines?babyId=${cleanId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const vaccineData = await res2.json();
@@ -49,16 +56,19 @@ export default function Stats() {
           vaccinesDone: vaccineData.done?.length || 0,
           vaccinesUpcoming: vaccineData.schedule?.length - (vaccineData.done?.length || 0) || 0,
         });
+      } else {
+        setError(logData.error || vaccineData.error || 'Failed to load stats');
       }
     } catch (err) {
-      console.error('Error fetching stats:', err);
+      setError(err.message);
     }
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (babyId) fetchStats();
-  }, [babyId]);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchStats();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-4">
@@ -66,19 +76,36 @@ export default function Stats() {
         <h1 className="text-3xl font-bold text-gray-800 mb-6">📊 Baby Stats</h1>
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Baby ID</label>
-          <input
-            type="text"
-            value={babyId}
-            onChange={(e) => setBabyId(e.target.value)}
-            placeholder="Paste baby ID from dashboard"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-          />
+          <form onSubmit={handleSearch} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Baby ID</label>
+              <input
+                type="text"
+                value={babyId}
+                onChange={(e) => setBabyId(e.target.value)}
+                placeholder="Paste baby ID from dashboard"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">Copy from Dashboard baby card</p>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition"
+            >
+              Load Stats
+            </button>
+          </form>
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+              ✗ {error}
+            </div>
+          )}
         </div>
 
         {loading ? (
           <p className="text-gray-600">Loading stats...</p>
-        ) : babyId ? (
+        ) : babyId.trim() ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gradient-to-br from-pink-100 to-pink-200 rounded-lg shadow-lg p-6">
               <h3 className="text-lg font-semibold text-pink-900 mb-2">🍼 Feedings Today</h3>
@@ -92,7 +119,9 @@ export default function Stats() {
 
             <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg shadow-lg p-6">
               <h3 className="text-lg font-semibold text-purple-900 mb-2">😴 Sleep Today</h3>
-              <p className="text-4xl font-bold text-purple-600">{Math.floor(stats.sleepMinutes / 60)}h {stats.sleepMinutes % 60}m</p>
+              <p className="text-4xl font-bold text-purple-600">
+                {Math.floor(stats.sleepMinutes / 60)}h {stats.sleepMinutes % 60}m
+              </p>
             </div>
 
             <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg shadow-lg p-6">
@@ -107,11 +136,13 @@ export default function Stats() {
 
             <div className="bg-gradient-to-br from-red-100 to-red-200 rounded-lg shadow-lg p-6">
               <h3 className="text-lg font-semibold text-red-900 mb-2">📈 Data Points</h3>
-              <p className="text-4xl font-bold text-red-600">{stats.feedingCount + stats.diaperCount + (stats.sleepMinutes > 0 ? 1 : 0)}</p>
+              <p className="text-4xl font-bold text-red-600">
+                {stats.feedingCount + stats.diaperCount + (stats.sleepMinutes > 0 ? 1 : 0)}
+              </p>
             </div>
           </div>
         ) : (
-          <p className="text-gray-600">Enter baby ID to see stats</p>
+          <p className="text-gray-600">Enter baby ID and click "Load Stats" to see statistics</p>
         )}
       </div>
     </div>

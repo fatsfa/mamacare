@@ -6,6 +6,7 @@ export default function Vaccines() {
   const [loading, setLoading] = useState(false);
   const [babyId, setBabyId] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     vaccineName: '',
     dateDone: new Date().toISOString().split('T')[0],
@@ -13,30 +14,44 @@ export default function Vaccines() {
   });
 
   useEffect(() => {
-    if (babyId) fetchVaccines();
+    if (babyId.trim()) fetchVaccines();
   }, [babyId]);
 
   const fetchVaccines = async () => {
+    const cleanId = babyId.trim();
+    if (!cleanId) return;
+    
     setLoading(true);
+    setError('');
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/vaccines?babyId=${babyId}`, {
+      const res = await fetch(`http://localhost:5000/api/vaccines?babyId=${cleanId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.ok) {
         setSchedule(data.schedule);
         setDone(data.done);
+      } else {
+        setError(data.error);
       }
     } catch (err) {
-      console.error('Error fetching vaccines:', err);
+      setError(err.message);
     }
     setLoading(false);
   };
 
   const handleMarkDone = async (e) => {
     e.preventDefault();
+    const cleanId = babyId.trim();
+    
+    if (!cleanId) {
+      setError('Please enter baby ID');
+      return;
+    }
+
     const token = localStorage.getItem('token');
+    setError('');
     try {
       const res = await fetch('http://localhost:5000/api/vaccines/mark-done', {
         method: 'POST',
@@ -45,7 +60,7 @@ export default function Vaccines() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          babyId,
+          babyId: cleanId,
           ...formData,
         }),
       });
@@ -56,10 +71,10 @@ export default function Vaccines() {
         setShowForm(false);
         fetchVaccines();
       } else {
-        alert(`✗ Error: ${data.error}`);
+        setError(data.error);
       }
     } catch (err) {
-      alert(`✗ Error: ${err.message}`);
+      setError(err.message);
     }
   };
 
@@ -81,7 +96,14 @@ export default function Vaccines() {
             placeholder="Paste baby ID from dashboard"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
+          <p className="text-xs text-gray-500 mt-1">Copy from Dashboard baby card</p>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+            ✗ {error}
+          </div>
+        )}
 
         {loading ? (
           <p className="text-gray-600">Loading...</p>
