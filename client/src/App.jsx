@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -22,21 +24,28 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register onLogin={setToken} />} />
-        <Route path="/login" element={<Login onLogin={setToken} />} />
-        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/babies/add" element={token ? <AddBaby /> : <Navigate to="/login" />} />
-        <Route path="/logs" element={token ? <Logs /> : <Navigate to="/login" />} />
-        <Route path="/vaccines" element={token ? <Vaccines /> : <Navigate to="/login" />} />
-        <Route path="/articles" element={<Articles />} />
-        <Route path="/ai-assistant" element={token ? <AIAssistant /> : <Navigate to="/login" />} />
-        <Route path="/stats" element={token ? <Stats /> : <Navigate to="/login" />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<Register onLogin={setToken} />} />
+              <Route path="/login" element={<Login onLogin={setToken} />} />
+              <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
+              <Route path="/babies/add" element={token ? <AddBaby /> : <Navigate to="/login" />} />
+              <Route path="/logs" element={token ? <Logs /> : <Navigate to="/login" />} />
+              <Route path="/vaccines" element={token ? <Vaccines /> : <Navigate to="/login" />} />
+              <Route path="/articles" element={<Articles />} />
+              <Route path="/ai-assistant" element={token ? <AIAssistant /> : <Navigate to="/login" />} />
+              <Route path="/stats" element={token ? <Stats /> : <Navigate to="/login" />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
