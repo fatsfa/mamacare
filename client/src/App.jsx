@@ -39,6 +39,7 @@ function App() {
               <Route path="/vaccines" element={token ? <Vaccines /> : <Navigate to="/login" />} />
               <Route path="/articles" element={<Articles />} />
               <Route path="/ai-assistant" element={token ? <AIAssistant /> : <Navigate to="/login" />} />
+              <Route path="/ai-help" element={token ? <AIAssistant /> : <Navigate to="/login" />} />
               <Route path="/stats" element={token ? <Stats /> : <Navigate to="/login" />} />
             </Routes>
           </main>

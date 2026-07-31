@@ -55,33 +55,44 @@ export default function Dashboard() {
           </div>
         ) : (
           <div>
-            {/* Quick Navigation - Only show when babies exist */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-              <Link to="/logs" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center">📝 Logs</Link>
-              <Link to="/vaccines" className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-center">💉 Vaccines</Link>
-              <Link to="/articles" className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-center">📚 Articles</Link>
-              <Link to="/stats" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg text-center">📊 Stats</Link>
-              <Link to="/ai-assistant" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-center">🤖 AI Help</Link>
+            {/* Quick Navigation */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              <Link to="/logs" className="flex flex-col items-center justify-center gap-1 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-3 rounded-2xl text-center transition shadow-sm">
+                <span className="text-2xl">📝</span><span className="text-sm">Logs</span>
+              </Link>
+              <Link to="/vaccines" className="flex flex-col items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-3 rounded-2xl text-center transition shadow-sm">
+                <span className="text-2xl">💉</span><span className="text-sm">Vaccines</span>
+              </Link>
+              <Link to="/stats" className="flex flex-col items-center justify-center gap-1 bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-3 rounded-2xl text-center transition shadow-sm">
+                <span className="text-2xl">📊</span><span className="text-sm">Stats</span>
+              </Link>
+              <Link to="/articles" className="flex flex-col items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-3 rounded-2xl text-center transition shadow-sm">
+                <span className="text-2xl">📚</span><span className="text-sm">Articles</span>
+              </Link>
+              <Link to="/ai-help" className="flex flex-col items-center justify-center gap-1 col-span-2 sm:col-span-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-3 rounded-2xl text-center transition shadow-sm">
+                <span className="text-2xl">🤖</span><span className="text-sm">AI Help</span>
+              </Link>
             </div>
 
             {/* Baby Cards */}
             <div className="space-y-4">
               {babies.map((baby) => (
-                <div key={baby._id} className="rounded-3xl bg-white p-6 shadow-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div key={baby._id} className="rounded-3xl bg-white p-5 shadow-sm border border-pink-100">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h2 className="text-2xl font-semibold text-pink-700">{baby.name}</h2>
-                      <p className="text-gray-500">DOB: {new Date(baby.dob).toLocaleDateString()}</p>
-                      <p className="text-xs text-gray-500 mt-1">ID: {baby._id}</p>
+                      <h2 className="text-xl font-bold text-pink-700">{baby.name}</h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Born: {new Date(baby.dob).toLocaleDateString()}</p>
                     </div>
-                    <div className="rounded-full bg-pink-100 px-4 py-2 text-pink-700 font-semibold">Age: {baby.ageReadable || 'N/A'}</div>
+                    <div className="rounded-full bg-pink-100 px-3 py-1.5 text-pink-700 font-semibold text-sm whitespace-nowrap">
+                      {baby.ageReadable || 'N/A'}
+                    </div>
                   </div>
-                  <p className="mt-4 text-gray-600">Gender: {baby.gender}</p>
-                  <p className="mt-2 text-gray-600">Blood Type: {baby.bloodType || 'Not set'}</p>
-                  <p className="mt-2 text-gray-600">
-                    Birth Weight: {baby.birthWeightKg != null ? `${baby.birthWeightKg.toFixed(1).replace(/\.0$/, '')} kg` : baby.birthWeight ? `${(baby.birthWeight / 1000).toFixed(1).replace(/\.0$/, '')} kg` : 'Not set'}
-                  </p>
-                  <p className="mt-2 text-gray-600">Height: {baby.heightCm ? `${baby.heightCm} cm` : 'Not set'}</p>
+                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm text-gray-600">
+                    <p>⚧ {baby.gender || 'Not set'}</p>
+                    <p>🩸 {baby.bloodType || 'Not set'}</p>
+                    <p>⚖️ {baby.birthWeightKg != null ? `${baby.birthWeightKg.toFixed(1)} kg` : baby.birthWeight ? `${(baby.birthWeight / 1000).toFixed(1)} kg` : 'Not set'}</p>
+                    <p>📏 {baby.heightCm ? `${baby.heightCm} cm` : 'Not set'}</p>
+                  </div>
                 </div>
               ))}
             </div>

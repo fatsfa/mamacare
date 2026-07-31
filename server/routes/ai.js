@@ -1,47 +1,52 @@
 const express = require('express');
 const router = express.Router();
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const AIChat = require('../models/AIChat');
-const Baby = require('../models/Baby');
 const authMiddleware = require('../middleware/auth');
 
 router.use(authMiddleware);
 
-const verifyBabyOwnership = async (babyId, userId) => {
-  const baby = await Baby.findOne({ _id: babyId, userId });
-  return Boolean(baby);
-};
+const SYSTEM_PROMPT = `You are MamaCare AI, a helpful and caring assistant for new mothers in the UAE with babies aged 0–24 months.
+Rules:
+- Answer baby care questions clearly and kindly (feeding, sleep, health, development, diapers).
+- Keep answers concise — 3 to 5 sentences max.
+- Always end with: "⚕️ For specific medical concerns, please consult your pediatrician."
+- Never diagnose or prescribe medicine.
+- If the question is unrelated to baby/mom care, politely redirect.`;
 
-const mockAIResponse = (question) => {
-  const lowerQuestion = question.toLowerCase();
+const getAIResponse = async (question) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY not set in environment');
 
-  if (lowerQuestion.includes('fever')) {
-    return 'A fever in babies (0-24 months) can be normal. Monitor for other symptoms like rash, cough, or lethargy. If baby is under 3 months and has a rectal temp >38°C, or is very fussy/inconsolable, call your pediatrician immediately. Otherwise, use infant paracetamol (dose by weight) and recheck temperature. IMPORTANT: Always consult your pediatrician for accurate diagnosis and treatment.';
-  }
-  if (lowerQuestion.includes('sleep') || lowerQuestion.includes('nap')) {
-    return 'Newborns sleep 16-17 hours daily in short bursts. By 3-6 months, establish a routine: bedtime around 7-8 PM, naps 2-3 times daily. Create a calm environment, consistent schedule, and safe sleep surface (crib/bassinet). Avoid co-sleeping with pillows/blankets. Some babies cry before sleep—this is normal. IMPORTANT: Consult your pediatrician about any sleep concerns.';
-  }
-  if (lowerQuestion.includes('feed') || lowerQuestion.includes('breast') || lowerQuestion.includes('bottle')) {
-    return 'Newborns eat every 2-3 hours. Breastfed babies: 8-12 times daily. Formula: follow package instructions (typically 30-60ml per feeding, increase as baby grows). Signs of good feeding: wet diapers, weight gain, contentment. If you have concerns about latch, milk supply, or baby not eating enough, contact your pediatrician or lactation consultant.';
-  }
-  if (lowerQuestion.includes('poop') || lowerQuestion.includes('diaper') || lowerQuestion.includes('constipation') || lowerQuestion.includes('diarrhea')) {
-    return 'Newborns have 1-8+ wet diapers daily (increases by day 4-5). Poop varies: breastfed babies have mustard-like stools, formula-fed have tan/brown. Constipation is rare in breastfed babies. If baby has fewer wet diapers than expected, strains excessively, or has very hard poop, consult your pediatrician. Hydration and diet affect digestion.';
-  }
-  if (lowerQuestion.includes('cry') || lowerQuestion.includes('colic')) {
-    return 'Crying is normal communication. Colic involves crying >3 hours/day, >3 days/week, lasting >3 weeks. Causes include gas, feeding issues, or overstimulation. Try: burping, gentle rocking, white noise, skin-to-skin contact, or adjusting feeding. If colic is severe or you suspect other issues, consult your pediatrician. Remember: crying itself doesn\'t harm baby.';
-  }
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-  return 'That\'s a great question about baby care. While I can provide general information, baby health and development are unique to each child. IMPORTANT: Always consult your pediatrician for specific advice about your baby\'s health, feeding, sleep, or development. They know your baby\'s medical history and can give personalized guidance.';
+  const result = await model.generateContent(`${SYSTEM_PROMPT}\n\nMom's question: ${question}`);
+  return result.response.text();
 };
 
 router.post('/ask', async (req, res) => {
   try {
     const { question } = req.body;
-    if (!question) return res.status(400).json({ ok: false, error: 'question is required' });
+    if (!question || !question.trim()) {
+      return res.status(400).json({ ok: false, error: 'Question is required' });
+    }
 
-    const response = mockAIResponse(question);
+    let response;
+    try {
+      response = await getAIResponse(question.trim());
+    } catch (aiErr) {
+      console.error('Gemini AI error:', aiErr.message);
+      // Handle rate limit specifically
+      if (aiErr.message && (aiErr.message.includes('429') || aiErr.message.includes('quota') || aiErr.message.includes('RESOURCE_EXHAUSTED'))) {
+        return res.status(429).json({ ok: false, error: 'AI is busy right now. Please wait a moment and try again.' });
+      }
+      return res.status(500).json({ ok: false, error: 'AI service unavailable. Please try again later.' });
+    }
+
     const chat = await AIChat.create({
       userId: req.user.id,
-      question,
+      question: question.trim(),
       response,
     });
 

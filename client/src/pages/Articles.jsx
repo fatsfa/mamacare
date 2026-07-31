@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchBabies } from '../api';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function Articles() {
   const [articles, setArticles] = useState([]);
   const [babies, setBabies] = useState([]);
@@ -35,7 +37,7 @@ export default function Articles() {
   const fetchArticles = async () => {
     setLoading(true);
     try {
-      let url = 'http://localhost:5000/api/articles';
+      let url = `${API_BASE}/api/articles`;
       const params = new URLSearchParams();
       if (category) params.append('category', category);
       if (search) params.append('search', search);
@@ -54,7 +56,7 @@ export default function Articles() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/articles/bookmarks/list', {
+      const res = await fetch(`${API_BASE}/api/articles/bookmarks/list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -74,7 +76,7 @@ export default function Articles() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/articles/bookmark', {
+      const res = await fetch(`${API_BASE}/api/articles/bookmark`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

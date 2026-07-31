@@ -1,753 +1,233 @@
-# MamaCare - Baby Tracker & Mom Support App
+﻿# 🌸 MamaCare — Baby Tracker & Mom Support App
 
-A mobile-first web app designed for new moms in UAE to track their baby's daily activities, manage vaccinations, and get trusted AI-powered advice.
+> A mobile-first web app for new moms in the UAE to track their baby's daily life and get trusted support.
 
-## 🎯 Overview
+![MamaCare](https://img.shields.io/badge/MamaCare-Baby%20Tracker-pink?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=flat-square&logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat-square&logo=mongodb)
+![JWT](https://img.shields.io/badge/Auth-JWT-orange?style=flat-square)
 
-**Target Users:** Moms (0-24 months postpartum) in UAE, ages 22-40. Also: Dads, nannies, grandparents helping with baby.
+---
 
-**Focus:** 0-2 years after birth. One place for logs, vaccines, AI answers, and articles.
+## 📖 About
 
-## 🛠 Tech Stack
+MamaCare is a full-stack web application built for new mothers to:
+- Track their baby's **feeding, diaper changes, and sleep** with live timers
+- Follow the **UAE MOH vaccination schedule** and mark vaccines as done
+- Get **AI-powered answers** to baby care questions (powered by Google Gemini)
+- Read **curated articles** on feeding, sleep, health, and development
+- View **daily and weekly stats** at a glance
 
-- **Frontend:** React + Vite + Tailwind CSS (mobile-first)
-- **Backend:** Node.js + Express
-- **Database:** MongoDB + Mongoose (MongoDB Atlas)
-- **Authentication:** JWT (JSON Web Tokens)
-- **Deployment:** Vercel (client) + Render (server)
+> Built as a portfolio project to demonstrate full-stack skills with React, Node.js, MongoDB, and AI integration.
 
-## ✨ Core Features (V1)
+---
 
-### A. Authentication
-- Register/Login with email + password
-- JWT protected routes
-- Forgot password via email
+## ✨ Features
 
-### B. Baby Profile
-- Add multiple babies per user
-- Fields: Name, DOB, Gender, Blood Type, Birth Weight, Photo
-- Auto-calculate baby age (e.g., "3 months 2 weeks")
-- Switch between babies on dashboard
+| Feature | Description |
+|---------|-------------|
+| 🔐 Auth | Register/Login with JWT — secure protected routes |
+| 👶 Baby Profile | Add multiple babies, auto-calculate age in months/weeks |
+| 📝 Feeding Log | Live timer OR manual time entry, track duration + ml |
+| 💩 Diaper Log | Single timestamp, potty done toggle |
+| 😴 Sleep Log | Start/stop timer with total sleep duration |
+| 💉 Vaccines | UAE MOH schedule, mark done, see upcoming/pending |
+| 🤖 AI Help | Chat with Google Gemini AI for baby care guidance |
+| 📚 Articles | 20+ pre-written articles: Feeding, Sleep, Health, Development |
+| 📊 Stats | Today / This Week summary with progress bars |
+| 📱 Mobile First | Soft pink/lavender UI, tap-friendly buttons |
 
-### C. Daily Baby Logs
-- **Feeding:** Track breast, bottle, or solid. Duration + amount (ml)
-- **Diaper:** Log pee, poo, or mixed. Add notes
-- **Sleep:** Start/stop timer for naps and night sleep
-- **History:** View logs by day/week. See daily stats (e.g., "8 feedings today, 12 hours sleep")
+---
 
-### D. Vaccination Tracker
-- Pre-loaded UAE MOH vaccine schedule by age
-- Auto-show "Upcoming" and "Due" vaccines based on baby DOB
-- Mark vaccines as completed + upload vaccine card photo
-- Simple reminders (e.g., "MMR due next week")
+## 🛠️ Tech Stack
 
-### E. AI Mom Assistant
-- Chat interface: Ask questions like "My baby has 38°C fever, what to do?"
-- AI returns safe, general advice + pediatrician disclaimer
-- Save question history
-- Powered by mock AI (for V1) or Gemini/OpenAI
+**Frontend**
+- React 18 + Vite
+- React Router v6
+- Tailwind CSS
 
-### F. Articles & Tips
-- 20+ pre-written articles
-- Categories: Feeding, Sleep, Health, Development
-- Search and bookmark articles
+**Backend**
+- Node.js + Express
+- MongoDB Atlas + Mongoose
+- JWT Authentication
+- Google Generative AI (Gemini 2.0 Flash)
 
-### G. Design
-- Soft, calm, clean UI
-- Colors: Pink, Lavender, White
-- 100% mobile-first
-- Tailwind CSS only
+**Testing**
+- Jest + Supertest (9 API tests)
 
-## 📋 Database Structure
+**Deployment**
+- Single Express server on Render
+- Frontend built into `client/dist` and served by Express
 
-```
-User: _id, name, email, password, createdAt
-Baby: _id, userId, name, dob, gender, photoUrl, bloodType, birthWeight, createdAt
-Log: _id, babyId, type (feeding/diaper/sleep), startTime, endTime, amount, notes, createdAt
-VaccineDone: _id, babyId, vaccineName, dateDone, photoUrl, createdAt
-Article: _id, title, category, content, createdAt
-Question: _id, userId, babyId, question, response, createdAt
-```
+---
 
-## 🚀 Getting Started (Local Development)
+## 🚀 Getting Started (Run Locally)
 
 ### Prerequisites
-- Node.js (v16+) installed
-- MongoDB Atlas account + connection string
-- Git
+- Node.js 18+
+- MongoDB Atlas account (free tier works)
+- Google Gemini API key (free at [aistudio.google.com](https://aistudio.google.com/app/apikey))
 
-### Setup
+### 1. Clone the repo
+```bash
+git clone https://github.com/YOUR_USERNAME/mamacare.git
+cd mamacare
+```
 
-1. **Clone the repo** (if shared)
-   ```bash
-   git clone <your-repo-url>
-   cd mamacare
-   ```
+### 2. Setup the server
+```bash
+cd server
+npm install
+npm run build
+```
 
-2. **Setup Server**
-   ```bash
-   cd server
-   npm install
-   cp .env.example .env
-   # Edit .env and add your MongoDB Atlas URI and JWT secret
-   npm start
-   ```
-   Server runs on `http://localhost:5000`
+This builds the React frontend into `client/dist` and lets the Express server serve the app for deployment.
 
-3. **Setup Client**
-   ```bash
-   cd ../client
-   npm install
-   npm run dev
-   ```
-   Client runs on `http://localhost:5173`
+Create `server/.env` file:
+```env
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster0.mongodb.net/mamacare?retryWrites=true&w=majority
+JWT_SECRET=your_strong_secret_key_here
+PORT=5000
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-4. **Test**
-   - Visit `http://localhost:5173` in your browser
-   - Should see "MamaCare — coming soon"
+Start the server:
+```bash
+npm run dev
+```
+
+### 3. Setup the client
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### 4. Open in browser
+```
+http://localhost:5173
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Auth
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login, returns JWT |
+| GET | `/api/auth/me` | Get current user (protected) |
+
+### Babies
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/babies` | Add a baby |
+| GET | `/api/babies` | List user's babies |
+| PUT | `/api/babies/:id` | Update baby |
+| DELETE | `/api/babies/:id` | Delete baby |
+
+### Logs
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/logs` | Create log (feeding/diaper/sleep) |
+| GET | `/api/logs?babyId=X&date=YYYY-MM-DD` | List logs by day |
+| DELETE | `/api/logs/:id` | Delete log |
+
+### Vaccines
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/vaccines?babyId=X` | Get schedule + done vaccines |
+| POST | `/api/vaccines/done` | Mark vaccine as done |
+
+### AI
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/ai/ask` | Ask a baby care question |
+| GET | `/api/ai/history` | Get past questions |
+
+### Articles
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/articles` | List all articles |
+| GET | `/api/articles?category=sleep` | Filter by category |
+| GET | `/api/articles?search=fever` | Search articles |
+
+---
+
+## 🧪 Running Tests
+
+```bash
+cd server
+npm test
+```
+
+Output: **9 tests passing** covering auth register, login, and protected routes.
+
+---
+
+## 🌍 Deployment
+
+| Service | Purpose |
+|---------|---------|
+| [Vercel](https://vercel.com) | React frontend |
+| [Render](https://render.com) | Node.js backend |
+| [MongoDB Atlas](https://mongodb.com/atlas) | Database |
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for step-by-step guide.
+
+---
 
 ## 📁 Project Structure
 
 ```
 mamacare/
-├── client/
+├── client/                  # React frontend
 │   ├── src/
-│   │   ├── App.jsx
-│   │   ├── Home.jsx
-│   │   ├── pages/
-│   │   ├── components/
-│   │   └── ...
-│   ├── package.json
-│   ├── tailwind.config.js
-│   └── ...
-├── server/
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Baby.js
-│   │   ├── Log.js
-│   │   ├── VaccineDone.js
-│   │   └── Article.js
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── babies.js
-│   │   ├── logs.js
-│   │   └── ...
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── data/
-│   │   └── vaccines.json
-│   ├── index.js
-│   ├── package.json
-│   └── .env.example
-├── README.md
-├── LICENSE
-└── .gitignore
-```
-
-## 📝 Success Metrics
-
-A mom can complete this flow in < 5 minutes:
-1. Register
-2. Add a baby
-3. Log one feeding
-4. See it on dashboard
-5. Check next vaccine
-6. Ask AI one question
-
-## 🔄 Roadmap (Future)
-
-- Real AI integration (OpenAI or Gemini API)
-- Push notifications & reminders
-- Photo uploads & storage
-- Analytics dashboard
-- Multi-language support
-- Wearable device integration
-
-## 🔌 API Endpoints Reference
-
-### **Base URL**
-- **Local:** `http://localhost:5000`
-- **Production:** `https://mamacare-api.render.com` (after deployment)
-
-All authenticated endpoints require header:
-```
-Authorization: Bearer <JWT_TOKEN>
+│   │   ├── pages/           # Register, Login, Dashboard, Logs, Vaccines, etc.
+│   │   ├── components/      # Navbar, Footer, ErrorBoundary
+│   │   └── api.js           # API helper functions
+│   └── package.json
+│
+└── server/                  # Node.js backend
+    ├── models/              # User, Baby, Log, VaccineDone, Article, AIChat
+    ├── routes/              # auth, babies, logs, vaccines, articles, ai
+    ├── middleware/          # JWT auth middleware
+    ├── data/                # UAE vaccine schedule JSON, articles JSON
+    ├── tests/               # Jest + Supertest tests
+    ├── app.js               # Express app (no server listen)
+    └── index.js             # Server entry point
 ```
 
 ---
 
-### **1️⃣ AUTHENTICATION**
+## 🔮 Future Features
 
-#### Register
-```
-POST /api/auth/register
-Content-Type: application/json
-
-Request Body:
-{
-  "name": "Fatima",
-  "email": "fatima@example.com",
-  "password": "SecurePass123"
-}
-
-Response (201):
-{
-  "ok": true,
-  "user": {
-    "id": "64e8f6b2c2a7f3d1e5b4a9c8",
-    "name": "Fatima",
-    "email": "fatima@example.com"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
-#### Login
-```
-POST /api/auth/login
-Content-Type: application/json
-
-Request Body:
-{
-  "email": "fatima@example.com",
-  "password": "SecurePass123"
-}
-
-Response (200):
-{
-  "ok": true,
-  "user": {
-    "id": "64e8f6b2c2a7f3d1e5b4a9c8",
-    "name": "Fatima",
-    "email": "fatima@example.com"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
-#### Get Current User
-```
-GET /api/auth/me
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "user": {
-    "_id": "64e8f6b2c2a7f3d1e5b4a9c8",
-    "name": "Fatima",
-    "email": "fatima@example.com",
-    "createdAt": "2026-07-24T12:41:21.694Z"
-  }
-}
-```
+- 📸 Baby photo upload
+- 🔔 Push notifications for upcoming vaccines
+- 📈 Growth charts (height/weight over time)
+- 🌐 Arabic language support
+- 👨‍👩‍👧 Multi-caregiver support (add dad/nanny)
+- 📤 Export logs as PDF
 
 ---
 
-### **2️⃣ BABIES (CRUD)**
-
-#### Create Baby
-```
-POST /api/babies
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "name": "Layla",
-  "dob": "2026-03-15",
-  "gender": "female",
-  "bloodType": "B+",
-  "birthWeightKg": 3.5,
-  "heightCm": 50
-}
-
-Response (200):
-{
-  "ok": true,
-  "baby": {
-    "_id": "64e8f6b2c2a7f3d1e5b4a9d9",
-    "userId": "64e8f6b2c2a7f3d1e5b4a9c8",
-    "name": "Layla",
-    "dob": "2026-03-15T00:00:00.000Z",
-    "gender": "female",
-    "bloodType": "B+",
-    "birthWeightKg": 3.5,
-    "heightCm": 50,
-    "ageReadable": "4 months 1 week",
-    "createdAt": "2026-07-24T12:41:21.694Z"
-  }
-}
-```
-
-#### List User's Babies
-```
-GET /api/babies
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "babies": [
-    {
-      "_id": "64e8f6b2c2a7f3d1e5b4a9d9",
-      "name": "Layla",
-      "dob": "2026-03-15T00:00:00.000Z",
-      "ageReadable": "4 months 1 week",
-      "gender": "female"
-    }
-  ]
-}
-```
-
-#### Get Baby by ID
-```
-GET /api/babies/:babyId
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "baby": { /* baby object */ }
-}
-```
-
-#### Update Baby
-```
-PUT /api/babies/:babyId
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "name": "Layla Rose",
-  "heightCm": 52
-}
-
-Response (200):
-{
-  "ok": true,
-  "baby": { /* updated baby object */ }
-}
-```
-
-#### Delete Baby
-```
-DELETE /api/babies/:babyId
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true
-}
-```
-
----
-
-### **3️⃣ LOGS (Feeding, Diaper, Sleep)**
-
-#### Create Log
-```
-POST /api/logs
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body (Feeding):
-{
-  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-  "type": "feeding",
-  "startTime": "2026-07-24T09:00:00Z",
-  "endTime": "2026-07-24T09:15:00Z",
-  "amount": 120,
-  "notes": "Left breast only"
-}
-
-Request Body (Sleep):
-{
-  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-  "type": "sleep",
-  "startTime": "2026-07-24T13:00:00Z",
-  "endTime": "2026-07-24T14:30:00Z",
-  "notes": "Afternoon nap"
-}
-
-Request Body (Diaper):
-{
-  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-  "type": "diaper",
-  "startTime": "2026-07-24T10:00:00Z",
-  "notes": "Poo, yellow color"
-}
-
-Response (200):
-{
-  "ok": true,
-  "log": {
-    "_id": "64e8f6b2c2a7f3d1e5b4a9ea",
-    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-    "type": "feeding",
-    "startTime": "2026-07-24T09:00:00.000Z",
-    "endTime": "2026-07-24T09:15:00.000Z",
-    "amount": 120,
-    "notes": "Left breast only",
-    "createdAt": "2026-07-24T12:41:21.694Z"
-  }
-}
-```
-
-#### List Logs for Baby by Date
-```
-GET /api/logs?babyId=64e8f6b2c2a7f3d1e5b4a9d9&date=2026-07-24
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "logs": [
-    { /* log object 1 */ },
-    { /* log object 2 */ }
-  ]
-}
-```
-
-#### Update Log (Stop Timer)
-```
-PUT /api/logs/:logId
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "endTime": "2026-07-24T14:30:00Z"
-}
-
-Response (200):
-{
-  "ok": true,
-  "log": { /* updated log */ }
-}
-```
-
-#### Delete Log
-```
-DELETE /api/logs/:logId
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true
-}
-```
-
-#### Get Daily Stats
-```
-GET /api/logs/stats?babyId=64e8f6b2c2a7f3d1e5b4a9d9&date=2026-07-24
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "stats": {
-    "feedingCount": 8,
-    "feedingTotalMl": 960,
-    "diaperCount": 6,
-    "sleepCount": 3,
-    "sleepTotalMinutes": 720
-  }
-}
-```
-
----
-
-### **4️⃣ VACCINES**
-
-#### Get Vaccine Schedule for Baby
-```
-GET /api/vaccines?babyId=64e8f6b2c2a7f3d1e5b4a9d9
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "vaccines": {
-    "upcoming": [
-      {
-        "name": "MMR",
-        "ageMonths": 12,
-        "daysUntilDue": 45
-      }
-    ],
-    "due": [
-      {
-        "name": "Pentavalent (1st dose)",
-        "ageMonths": 2,
-        "daysSinceDue": 5
-      }
-    ],
-    "completed": [
-      {
-        "name": "BCG",
-        "dateDone": "2026-03-15T00:00:00.000Z",
-        "photoUrl": "https://example.com/vaccine-card.jpg"
-      }
-    ]
-  }
-}
-```
-
-#### Mark Vaccine as Done
-```
-POST /api/vaccines/mark-done
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-  "vaccineName": "Pentavalent (1st dose)",
-  "dateDone": "2026-07-24T10:00:00Z",
-  "photoUrl": "https://example.com/vaccine-photo.jpg"
-}
-
-Response (200):
-{
-  "ok": true,
-  "done": {
-    "_id": "64e8f6b2c2a7f3d1e5b4a9eb",
-    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-    "vaccineName": "Pentavalent (1st dose)",
-    "dateDone": "2026-07-24T10:00:00.000Z",
-    "photoUrl": "https://example.com/vaccine-photo.jpg",
-    "createdAt": "2026-07-24T12:41:21.694Z"
-  }
-}
-```
-
----
-
-### **5️⃣ ARTICLES**
-
-#### List All Articles
-```
-GET /api/articles
-Auth: Not required
-
-Response (200):
-{
-  "ok": true,
-  "articles": [
-    {
-      "_id": "64e8f6b2c2a7f3d1e5b4a9ec",
-      "title": "How to Burp Your Baby",
-      "category": "feeding",
-      "content": "Burping helps prevent gas. Hold baby upright..."
-    }
-  ]
-}
-```
-
-#### Filter by Category
-```
-GET /api/articles?category=feeding
-Auth: Not required
-
-Response (200):
-{
-  "ok": true,
-  "articles": [ /* articles in feeding category */ ]
-}
-```
-
-#### Search Articles
-```
-GET /api/articles?search=sleep
-Auth: Not required
-
-Response (200):
-{
-  "ok": true,
-  "articles": [ /* articles matching "sleep" */ ]
-}
-```
-
-#### Bookmark Article
-```
-POST /api/articles/bookmark
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "articleId": "64e8f6b2c2a7f3d1e5b4a9ec"
-}
-
-Response (200):
-{
-  "ok": true,
-  "bookmarked": true
-}
-```
-
----
-
-### **6️⃣ AI ASSISTANT**
-
-#### Ask AI Question
-```
-POST /api/ai/ask
-Auth: Required ✅
-Content-Type: application/json
-
-Request Body:
-{
-  "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-  "question": "My baby has 38°C fever, what should I do?"
-}
-
-Response (200):
-{
-  "ok": true,
-  "answer": {
-    "_id": "64e8f6b2c2a7f3d1e5b4a9ed",
-    "userId": "64e8f6b2c2a7f3d1e5b4a9c8",
-    "babyId": "64e8f6b2c2a7f3d1e5b4a9d9",
-    "question": "My baby has 38°C fever, what should I do?",
-    "response": "Fever in babies can be normal. Monitor for other symptoms. Give infant paracetamol if needed. IMPORTANT: Always consult your pediatrician.",
-    "createdAt": "2026-07-24T12:41:21.694Z"
-  }
-}
-```
-
-#### Get AI Chat History
-```
-GET /api/ai/history?babyId=64e8f6b2c2a7f3d1e5b4a9d9
-Auth: Required ✅
-
-Response (200):
-{
-  "ok": true,
-  "history": [
-    { /* question/answer 1 */ },
-    { /* question/answer 2 */ }
-  ]
-}
-```
-
----
-
-### **Error Response Format**
-
-All errors follow this format:
-```
-{
-  "ok": false,
-  "error": "Description of the error"
-}
-```
-
-Common errors:
-- `400` - Bad request (invalid data)
-- `401` - Unauthorized (missing/invalid JWT)
-- `404` - Not found
-- `500` - Server error
-
----
-
-## 🚀 How to Run Locally
-
-### Prerequisites
-- **Node.js** v16+ and npm
-- **MongoDB Atlas** account with connection string (or local MongoDB)
-- **Git** for cloning the repository
-
-### Setup Backend (Server)
-
-1. **Navigate to server folder**
-   ```bash
-   cd server
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Create `.env` file** in `server/` folder
-   ```
-   PORT=5000
-   MONGO_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@cluster.mongodb.net/mamacare?retryWrites=true&w=majority
-   JWT_SECRET=your_super_secret_key_here_change_in_production
-   ```
-   Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with your MongoDB Atlas credentials.
-
-4. **Seed the database** (articles)
-   ```bash
-   npm run seed
-   ```
-
-5. **Start the server**
-   ```bash
-   npm run dev
-   ```
-   Server runs on `http://localhost:5000`
-
-### Setup Frontend (Client)
-
-1. **Navigate to client folder** (in a new terminal)
-   ```bash
-   cd client
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-   Frontend runs on `http://localhost:5173`
-
-### Test End-to-End Flow
-
-1. Open `http://localhost:5173` in your browser
-2. Click **Register** → create account with email + password
-3. Click **Add Baby** → fill in baby details (name, DOB, gender, blood type, weight, height)
-4. See baby appear on **Dashboard**
-5. Try **View Vaccines** → see UAE MOH schedule by age
-6. (Coming soon) Try **Add Log**, **Ask AI**, **Read Articles**
-
-### Verify Backend is Running
-
-Test with curl:
-```bash
-# Get all articles (no auth needed)
-curl http://localhost:5000/api/articles
-
-# Should return: { "ok": true, "articles": [...] }
-```
-
-### Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| `MONGO_URI not set` | Check `.env` file exists with correct MongoDB connection string |
-| `Connection refused on localhost:5000` | Ensure `npm run dev` is running in server folder |
-| `CORS error in browser console` | Backend may not be running; start with `npm run dev` |
-| `Token expired` | Delete token from localStorage or re-register: `localStorage.clear()` |
-| `Cannot read property 'babyId'` | Ensure request body includes all required fields |
+## 👩‍💻 About the Developer
+
+Built by a mom of a 6-month-old during 1 hour daily coding sessions — because moms can code too! 💪
+
+This project demonstrates:
+- Full-stack JavaScript (React + Node.js)
+- RESTful API design
+- MongoDB with Mongoose
+- JWT authentication
+- Third-party API integration (Google Gemini AI)
+- Mobile-first responsive design
+- Unit testing with Jest
 
 ---
 
 ## 📄 License
 
-MIT License - see LICENSE file
-
-## 👩‍💻 Developer
-
-Built as a portfolio project to demonstrate full-stack development with React, Node.js, MongoDB, and JWT authentication.
-
----
-
-**Last Updated:** 2026-07-24
+MIT License — see [LICENSE](LICENSE)

@@ -11,6 +11,16 @@ const verifyBabyOwnership = async (babyId, userId) => {
   return Boolean(baby);
 };
 
+const computeDurationMinutes = (startTime, endTime) => {
+  if (!startTime || !endTime) return undefined;
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return undefined;
+  const minutes = Math.round((end - start) / 60000);
+  if (minutes < 1) return undefined;
+  return minutes;
+};
+
 router.post('/', async (req, res) => {
   try {
     const body = req.body || {};
@@ -20,7 +30,11 @@ router.post('/', async (req, res) => {
     const isOwner = await verifyBabyOwnership(babyId, req.user.id);
     if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
 
-    const log = await Log.create(body);
+    const durationMinutes = computeDurationMinutes(body.startTime, body.endTime);
+    const payload = { ...body };
+    if (durationMinutes !== undefined) payload.durationMinutes = durationMinutes;
+
+    const log = await Log.create(payload);
     res.json({ ok: true, log });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });
@@ -59,7 +73,11 @@ router.put('/:id', async (req, res) => {
     const isOwner = await verifyBabyOwnership(log.babyId, req.user.id);
     if (!isOwner) return res.status(403).json({ ok: false, error: 'Not authorized for this baby' });
 
-    const updated = await Log.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const durationMinutes = computeDurationMinutes(req.body.startTime, req.body.endTime);
+    const payload = { ...req.body };
+    if (durationMinutes !== undefined) payload.durationMinutes = durationMinutes;
+
+    const updated = await Log.findByIdAndUpdate(req.params.id, payload, { new: true });
     res.json({ ok: true, log: updated });
   } catch (err) {
     res.status(400).json({ ok: false, error: err.message });

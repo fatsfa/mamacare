@@ -73,6 +73,16 @@ export default function Navbar() {
             >
               Articles
             </Link>
+            <Link
+              to="/ai-help"
+              className={`font-semibold px-4 py-2 rounded-lg transition ${
+                isActive('/ai-help')
+                  ? 'bg-purple-500 text-white'
+                  : 'text-purple-600 hover:bg-purple-100'
+              }`}
+            >
+              🤖 AI Help
+            </Link>
             <button
               onClick={logout}
               className="font-semibold px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
@@ -120,6 +130,13 @@ export default function Navbar() {
               className="block px-4 py-2 text-gray-700 hover:bg-pink-100 rounded-lg"
             >
               Articles
+            </Link>
+            <Link
+              to="/ai-help"
+              onClick={() => setShowMenu(false)}
+              className="block px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-lg font-semibold"
+            >
+              🤖 AI Help
             </Link>
             <button
               onClick={logout}

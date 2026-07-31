@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchBabies } from '../api';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export default function Vaccines() {
   const [schedule, setSchedule] = useState([]);
   const [done, setDone] = useState([]);
@@ -43,7 +45,7 @@ export default function Vaccines() {
     setError('');
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/vaccines?babyId=${selectedBabyId}`, {
+      const res = await fetch(`${API_BASE}/api/vaccines?babyId=${selectedBabyId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -66,7 +68,7 @@ export default function Vaccines() {
     setError('');
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch('http://localhost:5000/api/vaccines/mark-done', {
+      const res = await fetch(`${API_BASE}/api/vaccines/mark-done`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ babyId: selectedBabyId, ...formData }),
