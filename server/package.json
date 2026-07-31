@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "npm --prefix ../client install && npm --prefix ../client run build",
+    "build": "npm install && npm --prefix ../client install && npm --prefix ../client run build",
     "seed": "node scripts/seed.js",
     "seed:articles": "node scripts/seedArticles.js",
     "test": "jest --detectOpenHandles --forceExit --testTimeout=30000"
