@@ -22,6 +22,20 @@ describe('Health check', () => {
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('OK');
   });
+
+  it('GET /api/health returns OK', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('OK');
+  });
+});
+
+describe('Route mounting', () => {
+  it('protects /api/babies instead of returning 404', async () => {
+    const res = await request(app).get('/api/babies');
+    expect(res.status).toBe(401);
+    expect(res.body.ok).toBe(false);
+  });
 });
 
 describe('Auth — Register', () => {
