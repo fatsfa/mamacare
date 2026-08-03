@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 // 1. CORS - Must be first
 const allowedOrigins = [
-  'https://mamacare-fsli.onrender.com',
+  
   'https://mamacare-fsli-6xdv.onrender.com', // your frontend
   'http://localhost:3000', 
   'http://localhost:5173'
