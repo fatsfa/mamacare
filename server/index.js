@@ -1,13 +1,20 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
-const cors = require('cors');
 const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// 1. CORS first
+// 1. CORS - Must be first
+const allowedOrigins = [
+  'https://mamacare-fsli.onrender.com', // your frontend
+  'http://localhost:3000', 
+  'http://localhost:5173'
+];
+
 app.use(cors({
-  origin: ['https://mamacare-fsli.onrender.com', 'http://localhost:3000', 'http://localhost:5173'],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -15,22 +22,27 @@ app.use(cors({
 
 // 2. Body parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// 3. Test route to check if server is alive
+// 3. Health check route - to test if server is up
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ status: 'ok', message: 'MamaCare API is running' });
 });
 
-// 4. MOUNT YOUR ROUTES HERE
-const authRoutes = require('./routes/auth'); // change path to yours
+// 4. Import and use routes
+const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-// 5. Catch all 404 - this also needs CORS
+// Add other routes here
+// const userRoutes = require('./routes/user');
+// app.use('/api/user', userRoutes);
+
+// 5. 404 Handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// 6. DB + Server
+// 6. Connect to MongoDB
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -41,9 +53,9 @@ const connectDB = async () => {
   }
 };
 
-connectDB();
-
-const PORT = process.env.PORT || 5000;
+// 7. Start Server
 app.listen(PORT, () => {
   console.log(`✓ Server running on port ${PORT}`);
 });
+
+connectDB();
